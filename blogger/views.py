@@ -12,7 +12,8 @@ from .models import Background, Follow, Notice, User, Message, Cikes, Mlikes, Co
 def index(request):
     if request.user.is_authenticated:
         f = models.Follow.objects.filter(fans=request.user).values_list('following', flat=True)
-        msgs = models.Message.objects.select_related('user', 'o_ID').filter(Q(user__in=f, show=True) | Q(user=request.user))
+        msgs = models.Message.objects.select_related('user', 'o_ID').filter(
+            Q(user__in=f, show=True) | Q(user=request.user))
         return render(request, "index.html", {
             'msgs': msgs,
             "bg": get_colors(request.user)
@@ -225,30 +226,30 @@ def mlike1(request, m_id):
 
 
 def listlike(request):
-    mlike = Mlikes.objects.select_related('user').select_related('message_id')
-    clike = Cikes.objects.select_related('user').select_related('comment_id')
+    mlike = Mlikes.objects.select_related('user', 'message_id').filter(user=request.user)
+    clike = Cikes.objects.select_related('user', 'comment_id').filter(user=request.user)
     return render(request, "listl.html", {"mlikes": mlike, "clikes": clike, 'bg': get_colors(request.user)})
 
 
 def listcollect(request):
-    collect = Collect.objects.select_related('user')
+    collect = Collect.objects.select_related('user').filter(user=request.user)
     return render(request, "listl.html", {"mlikes": collect, 'bg': get_colors(request.user)})
 
 
 def listcomment(request):
-    comments = Comment.objects.select_related('user').select_related('message_id')
+    comments = Comment.objects.select_related('user', 'message_id').filter(user=request.user)
     return render(request, "listl.html", {"coms": comments, 'bg': get_colors(request.user)})
 
 
 def listfollow(request):
-    f = Follow.objects.filter(fans=request.user).select_related('following')
+    f = Follow.objects.filter(fans=request.user).select_related('following').filter(user=request.user)
     return render(request, "listfollow.html", {"fs": f, "content": "关注", 'bg': get_colors(request.user),
                                                'flag': True})
 
 
 def listfan(request):
     f = Follow.objects.filter(following=request.user).select_related('fans')
-    return render(request, "listfollow.html", {"fs": f, "content": "粉丝", 'bg': get_colors(request.user,),
+    return render(request, "listfollow.html", {"fs": f, "content": "粉丝", 'bg': get_colors(request.user, ),
                                                'flag': False})
 
 
