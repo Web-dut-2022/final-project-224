@@ -242,7 +242,7 @@ def listcomment(request):
 
 
 def listfollow(request):
-    f = Follow.objects.filter(fans=request.user).select_related('following').filter(user=request.user)
+    f = Follow.objects.filter(fans=request.user).select_related('following')
     return render(request, "listfollow.html", {"fs": f, "content": "关注", 'bg': get_colors(request.user),
                                                'flag': True})
 
