@@ -6,6 +6,13 @@
 
 {% block coms %}
 <div>
+                        <form action="{% url 'createcomment' msg.ID%}" method="post" role="search" class="relay">
+                            {% csrf_token %}
+                            <textarea class="form-control relay-text" name="content" placeholder="请输入你的评论"></textarea>
+                            <div>
+                                <input class="btn btn-default" type="submit" value="发布评论">
+                            </div>
+                        </form>
                         {% for cm in cms %}
                         <table class="table table-bordered"width="100%" rules=none>
                             <thead>
