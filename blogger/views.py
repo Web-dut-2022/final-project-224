@@ -165,7 +165,7 @@ def createcomment(request, m_id):
 def mlike(request, m_id):
     m = Message.objects.get(ID=m_id)
     user = request.user
-    n = Notice.objects.filter(user=m.user)
+    n = Notice.objects.get(user=m.user)
     ml = Mlikes.objects.filter(message_id=m, user=user)
     if ml:
         a = ml.first()

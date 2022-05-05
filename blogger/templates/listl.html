@@ -1,11 +1,11 @@
-{% extends "index.html" %}
+{% extends "timeline.html" %}
 <!--用来表示中间部分的时间线-->
-{% block pub %}
+{% block leftbar %}
+    {% include "leftbar.html" %}
+{% endblock %}
 
-    <div class="container"style="margin:0 auto;">
-        <div class="row" >
-            <!--中间主体-->
-            <div class="col-sm-6" >
+{% block pub %}
+            <div>
                 <!--这是对博文的点赞-->
                 {% for mlike in mlikes %}
                 <div class="media row bdc" id="mlikes">
@@ -16,8 +16,13 @@
                         <h4 class="media-heading link-color">
                             <a href="/user/{{ mlike.message_id.user }}">{{ mlike.message_id.user }}</a>
                         </h4>
-                        <p class="content">{{ mlike.message_id.content }}</p>
+                        <p class="msg-content">{{ mlike.message_id.content }}</p>
+                        {% if mlike.message_id.pic %}
                         <img src="/img/{{ mlike.message_id.pic }}" class="img-responsive">
+                        {% else %}
+                        <div style="height:40px;"></div>
+                        {% endif %}
+
                     </div>
                     <div>
                         <ul class="list-group list-group-horizontal text-center">
@@ -43,7 +48,7 @@
 
                 <!--这是对评论的点赞-->
                 {% for clike in clikes %}
-                <div class="media row" id="clikes">
+                <div class="media row bdc" id="clikes">
                     <div class="media-left col-sm-2">
                          <a href="/user/{{ clike.comment_id.user }}"><img alt="头像" src="/img/{{ clike.comment_id.user.profilePhoto }}" class="img-responsive img-circle"></a>
                     </div>
@@ -51,8 +56,7 @@
                         <h5 class="media-heading link-color">
                             <a href="/user/{{ clike.comment_id.user }}">{{ clike.comment_id.user }}</a>
                         </h5>
-                        <p class="content">{{ clike.comment_id.content }}</p>
-                        <img src="/img/{{ clike.comment_id.pic }}" class="img-responsive">
+                        <p class="msg-content">{{ clike.comment_id.content }}</p>
                     </div>
                 </div>
                 {% endfor %}
@@ -108,6 +112,8 @@
                 </div>
                 {% endfor %}
             </div>
-        </div>
-    </div>
+{% endblock %}
+
+{% block rightbar %}
+{% include "rightbar.html" %}
 {% endblock %}
